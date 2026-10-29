@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1209">
+<title>Pepeling — Pengingat Salat, Murojaah & Dzikir</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%231a1209' stroke='%23d8aa52' stroke-width='5'/%3E%3Ctext x='50' y='68' font-size='52' text-anchor='middle' fill='%23d8aa52'%3E☪%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Amiri+Quran&family=Cinzel:wght@500;700;800&family=Lora:ital,wght@0,400;0,500;0,700;1,400&family=Noto+Sans+Javanese:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1a1209;--card:#2c1f10;--card2:#392916;--line:#6e5126;--gold:#d8aa52;--gold2:#f2d68e;--text:#f1e3c1;--muted:#b49c6c;--ok:#9cc786;--warn:#e7a85d}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;color:var(--text);font-family:'Lora',serif;background:radial-gradient(ellipse at top,#3f2c12 0%,#1a1209 62%) fixed,var(--bg)}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23d8aa52' stroke-opacity='.09' stroke-width='1'%3E%3Ccircle cx='16' cy='16' r='16'/%3E%3Ccircle cx='48' cy='16' r='16'/%3E%3Ccircle cx='16' cy='48' r='16'/%3E%3Ccircle cx='48' cy='48' r='16'/%3E%3Ccircle cx='32' cy='32' r='16'/%3E%3C/g%3E%3C/svg%3E")}
+header,nav,main,footer{position:relative;z-index:1}
+h1,h2,h3,h4,.cz{font-family:'Cinzel',serif;margin:0}
+.jv{font-family:'Noto Sans Javanese',serif}
+.ar{font-family:'Amiri',serif}
+.mq{font-family:'Amiri Quran','Amiri',serif}
+.hidden{display:none!important}
+.wrap{max-width:1000px;margin:0 auto;padding:0 14px}
+.gold{color:var(--gold)}.gold2{color:var(--gold2)}.muted{color:var(--muted)}.sm{font-size:.78rem}.xs{font-size:.68rem}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}.center{text-align:center}
+.grid{display:grid;gap:12px}.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}.g3{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+/* Header */
+header.top{max-width:1000px;margin:0 auto;padding:18px 14px 10px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.mark{width:54px;height:54px;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.7rem;color:var(--gold);background:radial-gradient(circle,#4a3416,#1a1209);box-shadow:0 0 16px rgba(216,170,82,.25)}
+.brand .t{font-family:'Cinzel',serif;font-weight:800;font-size:1.55rem;letter-spacing:.22em;color:var(--gold2);line-height:1}
+.brand .s{font-size:.7rem;color:var(--muted);letter-spacing:.06em;margin-top:4px;font-style:italic}
+.sep{height:1px;margin:0 auto;max-width:972px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+/* Tabs */
+nav.tabs{position:sticky;top:0;z-index:20;background:rgba(26,18,9,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav.tabs .in{max-width:1000px;margin:0 auto;padding:8px 14px;display:flex;gap:6px;overflow-x:auto}
+.tab{font-family:'Cinzel',serif;font-weight:700;font-size:.74rem;letter-spacing:.08em;white-space:nowrap;padding:9px 15px;border-radius:12px;border:1px solid transparent;background:transparent;color:var(--muted);cursor:pointer;transition:.2s}
+.tab:hover{color:var(--gold2)}
+.tab.on{background:rgba(216,170,82,.16);border-color:var(--gold);color:var(--gold2);box-shadow:0 0 12px rgba(216,170,82,.18)}
+/* Komponen */
+main{padding:18px 14px 30px;max-width:1000px;margin:0 auto}
+.view{display:flex;flex-direction:column;gap:14px}
+.card{background:linear-gradient(160deg,var(--card),#241809);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.card2{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:12px}
+.ttl{font-size:1.02rem;color:var(--gold2);letter-spacing:.08em;display:flex;align-items:center;gap:8px}
+.orn{display:flex;align-items:center;gap:10px;color:var(--gold);margin:4px 0}
+.orn::before,.orn::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--line))}
+.orn::after{transform:scaleX(-1)}
+.btn{font:inherit;font-size:.78rem;font-weight:700;padding:8px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card2);color:var(--gold2);cursor:pointer;transition:.2s}
+.btn:hover{background:#4a351b;border-color:var(--gold)}
+.btn.gold{background:linear-gradient(180deg,#e8c068,#b98a33);color:#2a1a07;border-color:#e8c068}
+.btn.gold:hover{filter:brightness(1.1)}
+.btn.on{background:rgba(216,170,82,.22);border-color:var(--gold);color:#fff}
+.btn:disabled{opacity:.35;cursor:default}
+.inp{background:#21170b;border:1px solid var(--line);color:var(--text);border-radius:10px;padding:8px 12px;font:inherit;font-size:.85rem}
+.inp:focus{outline:none;border-color:var(--gold)}
+.pill{display:inline-block;font-size:.68rem;font-weight:700;padding:3px 11px;border-radius:999px;background:rgba(216,170,82,.12);border:1px solid var(--line);color:var(--gold2)}
+.spin{text-align:center;color:var(--muted);padding:30px;font-size:.85rem;animation:pl 1.2s infinite}@keyframes pl{50%{opacity:.4}}
+/* Jadwal */
+.times{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px;margin-top:12px}
+.tb{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:10px 6px;text-align:center;transition:.3s}
+.tb small{display:block;font-size:.66rem;letter-spacing:.14em;color:var(--muted);font-weight:700}
+.tb b{display:block;font-family:'Cinzel',serif;font-size:1.45rem;color:var(--gold2);margin:2px 0}
+.tb i{display:block;font-size:.62rem;color:var(--muted);font-style:normal}
+.tb.next{box-shadow:0 0 0 2px var(--gold)}.tb.act{box-shadow:0 0 0 2px var(--ok);background:#3b3a18}
+.status{margin-top:12px;background:#21170b;border:1px solid var(--line);border-radius:14px;padding:10px 14px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;font-size:.82rem}
+.status b{color:var(--gold2)}
+/* Aksara */
+.hero{text-align:center;padding:26px 14px}
+.hero .aks{font-size:2.6rem;color:var(--gold);line-height:1.4;text-shadow:0 0 18px rgba(216,170,82,.35)}
+.quote{font-style:italic;color:var(--text);line-height:1.7}
+/* Mushaf */
+.mushaf{background:#f4e6c4;color:#2a1a07;border-radius:14px;border:3px double #8a6428;padding:16px 14px}
+.mushaf .hd{display:flex;justify-content:space-between;font-size:.76rem;color:#6b4a18;border-bottom:1px solid #b8964f;padding-bottom:6px;margin-bottom:10px;font-family:'Cinzel',serif;font-weight:700}
+.mushaf .txt{direction:rtl;text-align:justify;text-align-last:center;line-height:2.5;font-family:'Amiri Quran','Amiri',serif}
+.mushaf .sb{text-align:center;margin:10px 0 4px;padding:6px;border:2px solid #8a6428;border-radius:10px;background:linear-gradient(#ecd49a,#e0c27d);font-family:'Amiri Quran','Amiri',serif;font-size:1.6rem;color:#4a2f0a}
+.mushaf .bsm{text-align:center;font-family:'Amiri Quran','Amiri',serif;font-size:1.6rem;margin:4px 0}
+.mushaf .no{font-size:.8em;color:#8a4b12}
+.mushaf .ft{text-align:center;margin-top:10px;font-family:'Cinzel',serif;font-weight:700;color:#6b4a18;font-size:.85rem}
+.done{background:rgba(156,199,134,.18);border:1px solid var(--ok);color:var(--ok)}
+/* Rekap */
+.stat{text-align:center}.stat b{display:block;font-family:'Cinzel',serif;font-size:1.7rem;color:var(--gold2)}.stat span{font-size:.7rem;color:var(--muted)}
+.bar{height:8px;background:#21170b;border-radius:99px;overflow:hidden;border:1px solid var(--line)}.bar i{display:block;height:100%;background:linear-gradient(90deg,#9a6f25,#e8c068)}
+.cols{display:flex;align-items:flex-end;gap:8px;height:120px}
+.cols div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:.64rem;color:var(--muted)}
+.cols i{width:100%;background:linear-gradient(180deg,#e8c068,#9a6f25);border-radius:6px 6px 0 0;min-height:2px}
+.juz{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px}
+.juz div{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:6px 8px;font-size:.7rem}
+.row-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card2);border:1px solid var(--line);border-radius:12px}
+.no-b{width:30px;height:30px;flex:none;border-radius:9px;background:#21170b;border:1px solid var(--line);color:var(--gold2);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700}
+.ayt{padding:14px;background:var(--card2);border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;gap:8px}
+.ayt .a{direction:rtl;text-align:right;font-size:1.7rem;line-height:2.2;color:var(--gold2)}
+.ayt .l{font-size:.78rem;color:#d9b87a;font-style:italic;line-height:1.6}.ayt .i{font-size:.82rem;line-height:1.65}
+/* Overlay */
+#iqomah-overlay{display:none;position:fixed;inset:0;z-index:100;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:radial-gradient(circle at 50% 30%,#5a3d14 0%,#2a1c0a 55%,#0f0a04 100%)}
+#iqomah-overlay::before{content:"";position:absolute;inset:0;background-image:inherit;opacity:.5}
+#iqomah-overlay>*{position:relative}
+#ov-count{font-family:'Cinzel',serif;font-weight:800;color:var(--gold2);line-height:1;font-size:clamp(5rem,24vw,20rem);text-shadow:0 0 40px rgba(216,170,82,.4)}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--gold);color:#2a1a07;padding:10px 18px;border-radius:12px;font-weight:700;font-size:.82rem;z-index:200;display:none}
+footer{text-align:center;padding:24px 14px 34px;color:var(--muted);font-size:.74rem}
+@media print{#iqomah-overlay{display:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <div class="mark jv">ꦥ</div>
+    <div>
+      <div class="t">PEPELING</div>
+      <div class="s">Pengingat salat · murojaah · dzikir — <span class="jv">ꦥꦼꦥꦼꦭꦶꦁ</span></div>
+    </div>
+  </div>
+  <div class="center">
+    <div id="hdr-date" class="sm gold2"></div>
+    <div class="xs muted">Jam <b id="jam-sekarang" class="gold2">--:--:--</b> WIB</div>
+  </div>
+</header>
+<div class="sep"></div>
+
+<nav class="tabs"><div class="in" id="tabs">
+  <button class="tab on" data-v="home" onclick="go('home')">BERANDA</button>
+  <button class="tab" data-v="murojaah" onclick="go('murojaah')">MUROJAAH</button>
+  <button class="tab" data-v="quran" onclick="go('quran')">AL-QUR'AN</button>
+  <button class="tab" data-v="hadis" onclick="go('hadis')">HADIS</button>
+  <button class="tab" data-v="dzikir" onclick="go('dzikir')">DZIKIR PAGI & PETANG</button>
+</div></nav>
+
+<main>
+
+<!-- ============ BERANDA ============ -->
+<section id="v-home" class="view">
+  <div class="card hero">
+    <div class="aks jv">ꦥꦼꦥꦼꦭꦶꦁ</div>
+    <h2 class="cz gold2" style="letter-spacing:.3em;font-size:1.4rem">PEPELING</h2>
+    <p class="muted sm" style="margin:6px 0 12px">“Pepeling” artinya pengingat — ingat waktu salat, ingat murojaah, ingat dzikir.</p>
+    <div class="orn">❖</div>
+    <p class="mq gold2" style="font-size:1.7rem;line-height:2;margin:6px 0">أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ</p>
+    <p class="quote sm" style="margin:0">“Ingatlah, hanya dengan mengingat Allah hati menjadi tenteram.” <span class="muted">(QS. Ar-Ra'd: 28)</span></p>
+  </div>
+
+  <div class="card" id="jadwal">
+    <div class="row between">
+      <div>
+        <div class="ttl">🕌 JADWAL SALAT HARI INI</div>
+        <div id="today-date-gregorian" class="xs muted" style="margin-top:3px">Memuat tanggal…</div>
+      </div>
+      <div class="row">
+        <span class="pill" id="ihtiyati-info"></span>
+        <span class="pill">🌙 <span id="today-date-hijri">Kalender Hijriah</span></span>
+      </div>
+    </div>
+    <div class="times">
+      <div class="tb" id="box-subuh"><small>SUBUH</small><b id="time-subuh">--:--</b><i id="iq-subuh"></i></div>
+      <div class="tb" id="box-syuruq"><small>TERBIT</small><b id="time-syuruq">--:--</b><i>&nbsp;</i></div>
+      <div class="tb" id="box-dzuhur"><small>DZUHUR</small><b id="time-dzuhur">--:--</b><i id="iq-dzuhur"></i></div>
+      <div class="tb" id="box-ashar"><small>ASHAR</small><b id="time-ashar">--:--</b><i id="iq-ashar"></i></div>
+      <div class="tb" id="box-maghrib"><small>MAGHRIB</small><b id="time-maghrib">--:--</b><i id="iq-maghrib"></i></div>
+      <div class="tb" id="box-isya"><small>ISYA</small><b id="time-isya">--:--</b><i id="iq-isya"></i></div>
+    </div>
+    <div class="status">
+      <span>⏳ <b id="status-waktu">Memuat jadwal…</b></span>
+      <button class="btn" onclick="mulaiTesLayar()">▶ Tes Layar Iqomah</button>
+    </div>
+  </div>
+
+  <div class="grid g3">
+    <div class="card">
+      <div class="ttl">📿 MUROJAAH HARI INI</div>
+      <p id="home-mj" class="sm" style="line-height:1.6"></p>
+      <button class="btn gold" onclick="go('murojaah')">Buka Mushaf</button>
+    </div>
+    <div class="card">
+      <div class="ttl">🌅 DZIKIR</div>
+      <p id="home-dz" class="sm" style="line-height:1.6"></p>
+      <button class="btn gold" onclick="go('dzikir')">Mulai Dzikir</button>
+    </div>
+    <div class="card">
+      <div class="ttl jv" style="font-family:'Cinzel',serif">✦ PITUTUR DINA IKI</div>
+      <p id="pitutur" class="quote" style="margin:8px 0 2px;font-size:1.05rem"></p>
+      <p id="pitutur-arti" class="xs muted" style="margin:0"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MUROJAAH ============ -->
+<section id="v-murojaah" class="view hidden">
+  <div class="card" style="padding:10px"><div class="row" id="mj-nav">
+    <button class="btn" data-s="mushaf" onclick="mjShow('mushaf')">📖 Mushaf Pojok 15 Baris</button>
+    <button class="btn" data-s="rekap" onclick="mjShow('rekap')">📊 Dashboard Rekap</button>
+    <button class="btn" data-s="catat" onclick="mjShow('catat')">✍️ Catat Murojaah</button>
+    <button class="btn" data-s="surah" onclick="mjShow('surah')">☰ Daftar 114 Surah</button>
+    <button class="btn" data-s="riwayat" onclick="mjShow('riwayat')">🕘 Riwayat Mutaba'ah</button>
+  </div></div>
+  <div id="mj-body" class="view"></div>
+</section>
+
+<!-- ============ AL-QUR'AN ============ -->
+<section id="v-quran" class="view hidden">
+  <div class="card">
+    <div class="ttl">📖 AL-QUR'AN AL-KARIM</div>
+    <p class="xs muted" style="margin:4px 0 0">114 surah: teks Arab, Latin & terjemahan Kemenag RI + audio murottal (sumber: equran.id)</p>
+  </div>
+  <div id="quran-list-view" class="view">
+    <input id="quran-search" class="inp" oninput="renderSurahList()" placeholder="Cari nama surah, arti, atau nomor…">
+    <div id="quran-list" class="grid g3"></div>
+  </div>
+  <div id="quran-reader" class="view hidden"></div>
+</section>
+
+<!-- ============ HADIS ============ -->
+<section id="v-hadis" class="view hidden">
+  <div class="card">
+    <div class="ttl">📜 HADIS NABI ﷺ</div>
+    <p class="xs muted" style="margin:4px 0 10px">Kitab hadis para perawi terpercaya, teks Arab & terjemahan (sumber: api.hadith.gading.dev)</p>
+    <div id="hadis-books" class="row"></div>
+    <div class="row" style="margin-top:12px">
+      <span class="sm muted">Lompat ke nomor:</span>
+      <input id="hadis-goto" type="number" min="1" class="inp" style="width:100px" placeholder="mis. 1">
+      <button class="btn" onclick="hadisGoto()">Buka</button>
+      <span id="hadis-info" class="xs muted"></span>
+    </div>
+  </div>
+  <div id="hadis-content" class="view"></div>
+  <div id="hadis-pager" class="row between"></div>
+  <p class="xs" style="color:var(--warn);line-height:1.6">⚠️ Hadis dalam Shahih Bukhari & Muslim telah disepakati keshahihannya. Untuk kitab Sunan & Musnad, derajat tiap hadis perlu dirujuk kepada penjelasan ulama hadis.</p>
+</section>
+
+<!-- ============ DZIKIR ============ -->
+<section id="v-dzikir" class="view hidden">
+  <div class="card">
+    <div class="ttl">🌅 DZIKIR PAGI & PETANG</div>
+    <p class="xs muted" style="margin:4px 0 10px">Berdasarkan hadis-hadis shahih (Hisnul Muslim). Ketuk tombol hitung untuk menghitung bacaan.</p>
+    <div class="row">
+      <button id="dz-tab-pagi" class="btn" onclick="dzSetWaktu('pagi')">🌅 Dzikir Pagi</button>
+      <button id="dz-tab-petang" class="btn" onclick="dzSetWaktu('petang')">🌇 Dzikir Petang</button>
+      <button class="btn" onclick="dzReset()" style="margin-left:auto">↺ Reset Hitungan</button>
+    </div>
+    <p id="dz-waktu-info" class="xs gold2" style="margin:10px 0 0"></p>
+  </div>
+  <div id="dz-list" class="view"></div>
+</section>
+
+</main>
+
+<footer>
+  <div class="orn">❖</div>
+  <div class="cz gold2" style="letter-spacing:.2em">PEPELING</div>
+  <div>Eling lan waspada — ingat dan senantiasa waspada.</div>
+  <div class="xs" style="margin-top:6px">Catatan murojaah tersimpan di perangkat Anda (localStorage). Gunakan fitur Ekspor di Riwayat untuk cadangan.</div>
+</footer>
+
+<!-- LAYAR ADZAN / IQOMAH -->
+<div id="iqomah-overlay">
+  <button class="btn" onclick="tutupOverlay()" style="position:absolute;top:14px;right:14px">✕ Tutup</button>
+  <button class="btn" onclick="layarPenuh()" style="position:absolute;top:14px;left:14px">⛶ Layar Penuh</button>
+  <div class="jv gold" style="font-size:2.4rem">ꦥꦼꦥꦼꦭꦶꦁ</div>
+  <div class="cz gold2" style="letter-spacing:.3em;font-size:1.1rem">PEPELING</div>
+  <div id="ov-badge" class="pill" style="margin-top:14px;font-size:.9rem"></div>
+  <h2 id="ov-title" class="cz" style="margin-top:22px;font-size:clamp(1.4rem,4.5vw,3.2rem);color:var(--text)"></h2>
+  <div id="ov-count"></div>
+  <p id="ov-sub" style="margin-top:14px;font-size:clamp(.9rem,2vw,1.6rem);max-width:760px;color:#e7cf9c;line-height:1.6"></p>
+  <div style="position:absolute;bottom:14px" class="sm muted">Jam <b id="ov-clock" class="gold2"></b> WIB</div>
+</div>
+<div id="toast"></div>
+
+<!-- ======================================================================
+     KONFIGURASI — SILAKAN UBAH ANGKA DI BAWAH SESUAI KEBUTUHAN
+     ====================================================================== -->
+<script>
+const CONFIG = {
+  // JEDA IQOMAH (menit) setelah adzan — sesuaikan dengan jam asli di masjid
+  IQOMAH_MENIT: { subuh: 20, dzuhur: 13, ashar: 12, maghrib: 15, isya: 13 },
+
+  // Lama layar "Shalat sedang berlangsung" setelah iqomah (menit)
+  DURASI_SHALAT_MENIT: { subuh: 10, dzuhur: 10, ashar: 10, maghrib: 10, isya: 10 },
+
+  // Koreksi/ikhtiyati (menit) yang ditambahkan ke jadwal dasar. Subuh +8 (Tarjih).
+  IHTIYATI_MENIT: { subuh: 8, syuruq: 0, dzuhur: 0, ashar: 0, maghrib: 0, isya: 0 },
+
+  // true = layar penuh adzan/iqomah muncul otomatis saat waktu salat
+  LAYAR_OTOMATIS: true,
+
+  // true = hari Jumat, Dzuhur tanpa hitung mundur iqomah (diganti Shalat Jumat)
+  JUMAT_TANPA_IQOMAH: true,
+
+  // Lokasi & metode (Kemenag RI = 20). Ganti koordinat sesuai lokasi masjid Anda.
+  LAT: -7.9628,
+  LNG: 110.7135,
+  METODE: 20,
+  ZONA_WAKTU: 'Asia/Jakarta'
+};
+</script>
+
+<script>
+/* ===================== UTILITAS ===================== */
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = n => String(n).padStart(2, '0');
+const SPIN = '<div class="spin">Memuat data…</div>';
+const errHtml = fn => `<div class="spin" style="animation:none;color:var(--warn)">Gagal memuat data. Periksa koneksi internet.<br><br><button class="btn" onclick="${fn}">Coba lagi</button></div>`;
+const LS = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+function toast(m) { const t = $('toast'); t.innerText = m; t.style.display = 'block'; clearTimeout(toast.h); toast.h = setTimeout(() => t.style.display = 'none', 2200); }
+const arNum = n => String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+
+/* ===================== NAVIGASI ===================== */
+const VIEWS = ['home', 'murojaah', 'quran', 'hadis', 'dzikir'];
+function go(v) {
+  VIEWS.forEach(x => {
+    $('v-' + x).classList.toggle('hidden', x !== v);
+  });
+  document.querySelectorAll('#tabs .tab').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  if (v === 'home') refreshHome();
+  if (v === 'murojaah') mjShow(mj.sub);
+  if (v === 'quran') loadSurahList();
+  if (v === 'hadis') loadHadis();
+  if (v === 'dzikir') dzInit();
+  try { history.replaceState(null, '', '#' + v); } catch (e) {}
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ===================== JADWAL SALAT + IQOMAH ===================== */
+const NAMA = { subuh: 'Subuh', dzuhur: 'Dzuhur', ashar: 'Ashar', maghrib: 'Maghrib', isya: 'Isya' };
+const FIVE = ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'];
+const API_KEY = { subuh: 'Fajr', syuruq: 'Sunrise', dzuhur: 'Dhuhr', ashar: 'Asr', maghrib: 'Maghrib', isya: 'Isha' };
+const BULAN_HIJRI = ['Muharram', 'Safar', 'Rabiul Awal', 'Rabiul Akhir', 'Jumadil Awal', 'Jumadil Akhir', 'Rajab', "Sya'ban", 'Ramadhan', 'Syawal', "Dzulqa'dah", 'Dzulhijjah'];
+let T = null, testState = null, dismissedKey = null, sedangMuat = false;
+
+function wibNow() { return new Date(new Date().toLocaleString('en-US', { timeZone: CONFIG.ZONA_WAKTU })); }
+function dateKey(d) { return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; }
+const fmtHM = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+function fmtMS(ms) { const s = Math.max(0, Math.ceil(ms / 1000)); return `${pad(Math.floor(s / 60))}:${pad(s % 60)}`; }
+function fmtHMS(ms) { const s = Math.max(0, Math.floor(ms / 1000)); return `${pad(Math.floor(s / 3600))}:${pad(Math.floor((s % 3600) / 60))}:${pad(s % 60)}`; }
+function parseTime(str, base, add) {
+  const m = /(\d{1,2}):(\d{2})/.exec(str || ''); if (!m) return null;
+  const d = new Date(base); d.setHours(+m[1], +m[2] + add, 0, 0); return d;
+}
+
+function applyTimings(timings, hijri, base) {
+  const t = { key: dateKey(base) };
+  Object.keys(API_KEY).forEach(n => {
+    const d = parseTime(timings[API_KEY[n]], base, CONFIG.IHTIYATI_MENIT[n] || 0);
+    t[n] = d; if (d) $('time-' + n).innerText = fmtHM(d);
+  });
+  T = t;
+  if (hijri) {
+    const mn = BULAN_HIJRI[(hijri.month && hijri.month.number ? hijri.month.number : 1) - 1];
+    $('today-date-hijri').innerText = `${hijri.day} ${mn} ${hijri.year} H`;
+  }
+}
+
+async function fetchPrayerTimes() {
+  if (sedangMuat) return; sedangMuat = true;
+  const base = wibNow(), key = dateKey(base);
+  const tglM = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: CONFIG.ZONA_WAKTU });
+  $('today-date-gregorian').innerText = tglM; $('hdr-date').innerText = tglM;
+  try {
+    const tgl = `${pad(base.getDate())}-${pad(base.getMonth() + 1)}-${base.getFullYear()}`;
+    const r = await fetch(`https://api.aladhan.com/v1/timings/${tgl}?latitude=${CONFIG.LAT}&longitude=${CONFIG.LNG}&method=${CONFIG.METODE}&timezonestring=${CONFIG.ZONA_WAKTU}`);
+    const j = await r.json();
+    if (j && j.data) { applyTimings(j.data.timings, j.data.date.hijri, base); LS.set('pepeling-jadwal', { key, t: j.data.timings, h: j.data.date.hijri }); }
+  } catch (e) {
+    const c = LS.get('pepeling-jadwal', null);
+    if (c && c.key === key) applyTimings(c.t, c.h, base); else $('status-waktu').innerText = 'Gagal memuat jadwal. Periksa koneksi internet.';
+  }
+  sedangMuat = false;
+}
+
+function hitungState(now) {
+  if (testState) {
+    const el = (Date.now() - testState.start) / 1000;
+    if (el < testState.iq) return { phase: 'iqomah', prayer: 'dzuhur', remain: (testState.iq - el) * 1000, test: true };
+    if (el < testState.iq + testState.sh) return { phase: 'shalat', prayer: 'dzuhur', remain: 1, test: true };
+    testState = null;
+  }
+  if (!T) return { phase: 'none' };
+  for (const p of FIVE) {
+    const t0 = T[p]; if (!t0) continue;
+    if (p === 'dzuhur' && now.getDay() === 5 && CONFIG.JUMAT_TANPA_IQOMAH) continue;
+    const iq = CONFIG.IQOMAH_MENIT[p] * 60000, sh = CONFIG.DURASI_SHALAT_MENIT[p] * 60000, s = t0.getTime();
+    if (now >= t0 && now < s + iq) return { phase: 'iqomah', prayer: p, remain: s + iq - now, t0 };
+    if (now >= s + iq && now < s + iq + sh) return { phase: 'shalat', prayer: p, remain: s + iq + sh - now, t0 };
+  }
+  return { phase: 'none' };
+}
+function waktuBerikut(now) {
+  if (!T) return null;
+  for (const p of FIVE) if (T[p] && T[p] > now) return { prayer: p, time: T[p], besok: false };
+  return T.subuh ? { prayer: 'subuh', time: new Date(T.subuh.getTime() + 86400000), besok: true } : null;
+}
+
+function tick() {
+  const now = wibNow();
+  const clock = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  $('jam-sekarang').innerText = clock; $('ov-clock').innerText = clock;
+  if (T && T.key !== dateKey(now)) fetchPrayerTimes();
+  const st = hitungState(now), next = waktuBerikut(now);
+  ['subuh', 'syuruq', 'dzuhur', 'ashar', 'maghrib', 'isya'].forEach(n => $('box-' + n).classList.remove('next', 'act'));
+  const s = $('status-waktu');
+  if (st.phase === 'iqomah') { s.innerText = `Menjelang Iqomah ${NAMA[st.prayer]} — ${fmtMS(st.remain)}`; $('box-' + st.prayer).classList.add('act'); }
+  else if (st.phase === 'shalat') { s.innerText = `Shalat ${NAMA[st.prayer]} berjamaah sedang berlangsung`; $('box-' + st.prayer).classList.add('act'); }
+  else if (next) { s.innerText = `Menuju adzan ${NAMA[next.prayer]}${next.besok ? ' (besok)' : ''} — ${fmtHMS(next.time - now)}`; if (!next.besok) $('box-' + next.prayer).classList.add('next'); }
+  renderOverlay(st);
+}
+
+function renderOverlay(st) {
+  const ov = $('iqomah-overlay');
+  if (st.phase === 'none') { dismissedKey = null; ov.style.display = 'none'; return; }
+  const key = (st.test ? 'test-' : dateKey(wibNow()) + '-') + st.prayer + '-' + st.phase;
+  if ((!CONFIG.LAYAR_OTOMATIS && !st.test) || dismissedKey === key) { ov.style.display = 'none'; return; }
+  ov.dataset.key = key; ov.style.display = 'flex';
+  const nm = NAMA[st.prayer];
+  $('ov-badge').innerText = `Waktu Adzan ${nm}${st.t0 ? ' — ' + fmtHM(st.t0) : ''}`;
+  if (st.phase === 'iqomah') {
+    $('ov-title').innerText = `Menjelang Iqomah ${nm}`;
+    $('ov-count').innerText = fmtMS(st.remain);
+    $('ov-sub').innerText = 'Mari bersiap, luruskan niat, dan segera menempati shaf terdepan.';
+  } else {
+    $('ov-title').innerText = `Shalat ${nm} Berjamaah Sedang Berlangsung`;
+    $('ov-count').innerText = '';
+    $('ov-sub').innerText = 'Luruskan dan rapatkan shaf. Mohon matikan atau silentkan HP Anda.';
+  }
+}
+function tutupOverlay() {
+  dismissedKey = $('iqomah-overlay').dataset.key || null;
+  $('iqomah-overlay').style.display = 'none'; testState = null;
+  if (document.fullscreenElement) document.exitFullscreen();
+}
+function layarPenuh() {
+  const el = $('iqomah-overlay');
+  if (!document.fullscreenElement && el.requestFullscreen) el.requestFullscreen().catch(() => {});
+  else if (document.exitFullscreen) document.exitFullscreen();
+}
+function mulaiTesLayar() { dismissedKey = null; testState = { start: Date.now(), iq: 15, sh: 8 }; tick(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') tutupOverlay(); });
+
+/* ===================== BERANDA ===================== */
+const PITUTUR = [
+  ['Eling lan waspada.', 'Ingat (kepada Allah) dan senantiasa waspada.'],
+  ['Urip iku urup.', 'Hidup itu menyala: berilah manfaat bagi sesama.'],
+  ['Alon-alon waton kelakon.', 'Pelan-pelan asal tercapai; istiqamah lebih utama.'],
+  ['Sabar lan nrima ing pandum.', 'Bersabar dan ikhlas menerima bagian yang Allah tetapkan.'],
+  ['Ngelmu iku kelakone kanthi laku.', 'Ilmu itu terwujud dengan amal dan kesungguhan.']
+];
+function refreshHome() {
+  const now = wibNow(), doy = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
+  const p = PITUTUR[doy % PITUTUR.length];
+  $('pitutur').innerText = '“' + p[0] + '”'; $('pitutur-arti').innerText = p[1];
+  const h = hariIni();
+  $('home-mj').innerHTML = h > 0 ? `Alhamdulillah, hari ini Anda sudah murojaah <b class="gold2">${h} halaman</b>. Pertahankan istiqamah! Streak: <b class="gold2">${hitungStreak()} hari</b>.` : `Belum ada catatan murojaah hari ini. Yuk, buka mushaf dan murojaah walau satu halaman.`;
+  const w = now.getHours() < 12 ? 'pagi' : 'petang';
+  $('home-dz').innerHTML = `Waktunya <b class="gold2">dzikir ${w}</b>. ` + (w === 'pagi' ? 'Dibaca setelah Subuh hingga Dhuha.' : 'Dibaca setelah Ashar hingga Maghrib.');
+}
+
+/* ===================== MUROJAAH ===================== */
+const SURAH = ["Al-Fatihah","Al-Baqarah","Ali 'Imran","An-Nisa'","Al-Ma'idah","Al-An'am","Al-A'raf","Al-Anfal","At-Taubah","Yunus","Hud","Yusuf","Ar-Ra'd","Ibrahim","Al-Hijr","An-Nahl","Al-Isra'","Al-Kahf","Maryam","Taha","Al-Anbiya'","Al-Hajj","Al-Mu'minun","An-Nur","Al-Furqan","Asy-Syu'ara'","An-Naml","Al-Qasas","Al-'Ankabut","Ar-Rum","Luqman","As-Sajdah","Al-Ahzab","Saba'","Fatir","Yasin","As-Saffat","Sad","Az-Zumar","Gafir","Fussilat","Asy-Syura","Az-Zukhruf","Ad-Dukhan","Al-Jasiyah","Al-Ahqaf","Muhammad","Al-Fath","Al-Hujurat","Qaf","Az-Zariyat","At-Tur","An-Najm","Al-Qamar","Ar-Rahman","Al-Waqi'ah","Al-Hadid","Al-Mujadalah","Al-Hasyr","Al-Mumtahanah","As-Saff","Al-Jumu'ah","Al-Munafiqun","At-Tagabun","At-Talaq","At-Tahrim","Al-Mulk","Al-Qalam","Al-Haqqah","Al-Ma'arij","Nuh","Al-Jinn","Al-Muzzammil","Al-Muddassir","Al-Qiyamah","Al-Insan","Al-Mursalat","An-Naba'","An-Nazi'at","'Abasa","At-Takwir","Al-Infitar","Al-Mutaffifin","Al-Insyiqaq","Al-Buruj","At-Tariq","Al-A'la","Al-Gasyiyah","Al-Fajr","Al-Balad","Asy-Syams","Al-Lail","Ad-Duha","Asy-Syarh","At-Tin","Al-'Alaq","Al-Qadr","Al-Bayyinah","Az-Zalzalah","Al-'Adiyat","Al-Qari'ah","At-Takasur","Al-'Asr","Al-Humazah","Al-Fil","Quraisy","Al-Ma'un","Al-Kausar","Al-Kafirun","An-Nasr","Al-Lahab","Al-Ikhlas","Al-Falaq","An-Nas"];
+// Halaman awal tiap surah (mushaf 604 halaman)
+const SURAH_HAL = [1,2,50,77,106,128,151,177,187,208,221,235,249,255,262,267,282,293,305,312,322,332,342,350,359,367,377,385,396,404,411,415,418,428,434,440,446,453,458,467,477,483,489,496,499,502,507,511,515,518,520,523,526,528,531,534,537,542,545,549,551,553,554,556,558,560,562,564,566,568,570,572,574,575,577,578,580,582,583,585,586,587,587,589,590,591,591,592,593,594,595,595,596,596,597,597,598,598,599,599,600,600,601,601,601,602,602,602,603,603,603,604,604,604];
+const JUZ_HAL = [1,22,42,62,82,102,121,142,162,182,201,222,242,262,282,302,322,342,362,382,402,422,442,462,482,502,522,542,562,582];
+const juzDari = p => { let j = 0; JUZ_HAL.forEach((h, i) => { if (p >= h) j = i; }); return j + 1; };
+const surahRange = i => [SURAH_HAL[i], Math.max(SURAH_HAL[i], (SURAH_HAL[i + 1] || 605) - 1)];
+const juzRange = i => [JUZ_HAL[i], (JUZ_HAL[i + 1] || 605) - 1];
+
+let REC = LS.get('pepeling-murojaah', []);
+const mj = { sub: 'mushaf', hal: LS.get('pepeling-hal', 1), zoom: 1, cache: new Map() };
+const ZOOMS = [1.5, 1.8, 2.1, 2.5];
+const saveRec = () => LS.set('pepeling-murojaah', REC);
+const todayStr = () => dateKey(wibNow());
+function addDays(s, n) { const d = new Date(s + 'T00:00:00'); d.setDate(d.getDate() + n); return dateKey(d); }
+
+function peta() {
+  const m = new Map();
+  REC.forEach(r => { for (let p = Math.max(1, r.dari); p <= Math.min(604, r.sampai); p++) { const o = m.get(p) || { n: 0, last: '' }; o.n++; if (r.tgl > o.last) o.last = r.tgl; m.set(p, o); } });
+  return m;
+}
+function hariIni() { const t = todayStr(); return REC.filter(r => r.tgl === t).reduce((a, r) => a + (r.sampai - r.dari + 1), 0); }
+function hitungStreak() {
+  const s = new Set(REC.map(r => r.tgl)); let d = todayStr(); if (!s.has(d)) d = addDays(d, -1);
+  let n = 0; while (s.has(d)) { n++; d = addDays(d, -1); } return n;
+}
+function cover(m, [a, b]) { let c = 0; for (let p = a; p <= b; p++) if (m.has(p)) c++; return { c, t: b - a + 1, pct: Math.round(c / (b - a + 1) * 100) }; }
+
+function mjShow(s) {
+  mj.sub = s || 'mushaf';
+  document.querySelectorAll('#mj-nav .btn').forEach(b => b.classList.toggle('on', b.dataset.s === mj.sub));
+  ({ mushaf: rMushaf, rekap: rRekap, catat: rCatat, surah: rSurah, riwayat: rRiwayat })[mj.sub]();
+}
+
+/* --- Mushaf --- */
+function rMushaf() {
+  $('mj-body').innerHTML = `
+  <div class="card row between">
+    <div class="sm muted">Aplikasi Murojaah Al-Qur'an / <b class="gold2">Mushaf Pojok 15 Baris</b></div>
+    <div class="row"><button class="btn" onclick="mushafZoom()">🔍 Zoom Mushaf</button><button class="btn gold" onclick="mjShow('catat')">＋ Catat Murojaah</button></div>
+  </div>
+  <div class="card row between">
+    <div class="row">
+      <button class="btn" onclick="mushafLoad(mj.hal-1)">‹ Sebelumnya</button>
+      <span class="sm muted">Hal.</span><input id="mj-hal" type="number" min="1" max="604" class="inp" style="width:78px;font-weight:700" onchange="mushafLoad(+this.value)">
+      <span class="sm muted">/ 604</span>
+      <button class="btn" onclick="mushafLoad(mj.hal+1)">Selanjutnya ›</button>
+    </div>
+    <div class="row">
+      <select id="mj-surah" class="inp" onchange="if(this.value)mushafLoad(SURAH_HAL[this.value-1])"><option value="">-- Surah --</option>${SURAH.map((n, i) => `<option value="${i + 1}">${i + 1}. ${esc(n)}</option>`).join('')}</select>
+      <select id="mj-juz" class="inp" onchange="if(this.value)mushafLoad(JUZ_HAL[this.value-1])"><option value="">-- Juz --</option>${JUZ_HAL.map((h, i) => `<option value="${i + 1}">Juz ${i + 1}</option>`).join('')}</select>
+      <button class="btn gold" onclick="catatHalIni()">🔖 Catat Murojaah Hal Ini</button>
+    </div>
+  </div>
+  <div class="card"><div id="mushaf-page"></div>
+    <p class="xs muted center" style="margin:10px 0 0">Susunan 604 halaman (15 baris/halaman, model mushaf pojok). Teks Utsmani dari api.alquran.cloud; tata letak baris menyesuaikan lebar layar.</p>
+  </div>`;
+  mushafLoad(mj.hal);
+}
+function mushafZoom() { mj.zoom = (mj.zoom + 1) % ZOOMS.length; const e = document.querySelector('.mushaf .txt'); if (e) e.style.fontSize = ZOOMS[mj.zoom] + 'rem'; toast('Ukuran huruf: ' + ['Kecil', 'Sedang', 'Besar', 'Sangat besar'][mj.zoom]); }
+async function getPage(n) {
+  if (mj.cache.has(n)) return mj.cache.get(n);
+  const r = await fetch(`https://api.alquran.cloud/v1/page/${n}/quran-uthmani`);
+  const j = await r.json(); mj.cache.set(n, j.data.ayahs); return j.data.ayahs;
+}
+async function mushafLoad(n) {
+  n = Math.min(604, Math.max(1, Math.floor(n) || 1)); mj.hal = n; LS.set('pepeling-hal', n);
+  if ($('mj-hal')) $('mj-hal').value = n;
+  const box = $('mushaf-page'); if (!box) return;
+  box.innerHTML = SPIN;
+  try {
+    const ay = await getPage(n); if (mj.hal !== n) return;
+    let html = '', open = false;
+    const bukaB = () => { if (!open) { html += `<div class="txt" style="font-size:${ZOOMS[mj.zoom]}rem">`; open = true; } };
+    const tutupB = () => { if (open) { html += '</div>'; open = false; } };
+    ay.forEach(a => {
+      const s = a.surah.number;
+      let t = a.text;
+      if (a.numberInSurah === 1) {
+        tutupB();
+        html += `<div class="sb">${esc(a.surah.name)}</div>`;
+        if (s !== 1 && s !== 9) { html += '<div class="bsm">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>'; t = t.split(' ').slice(4).join(' '); }
+      }
+      bukaB();
+      html += `${esc(t)} <span class="no">﴿${arNum(a.numberInSurah)}﴾</span> `;
+    });
+    tutupB();
+    const names = [...new Set(ay.map(a => a.surah.name))].join(' • ');
+    const m = peta(), info = m.get(n);
+    box.innerHTML = `
+      ${info ? `<div class="pill done" style="margin-bottom:10px">✓ Halaman ini sudah dimurojaah ${info.n}× (terakhir ${esc(info.last)})</div>` : ''}
+      <div class="mushaf"><div class="hd"><span>JUZ ${ay[0].juz}</span><span class="ar" style="font-size:1rem">${esc(names)}</span></div>${html}<div class="ft">— ${n} —</div></div>`;
+    $('mj-surah').value = ay[0].surah.number; $('mj-juz').value = ay[0].juz;
+    if (n < 604) getPage(n + 1).catch(() => {});
+  } catch (e) { box.innerHTML = errHtml(`mushafLoad(${n})`); }
+}
+function catatHalIni() {
+  REC.push({ id: Date.now(), tgl: todayStr(), dari: mj.hal, sampai: mj.hal, mutu: 'lancar', cat: '' });
+  saveRec(); toast(`✓ Halaman ${mj.hal} tercatat`); mushafLoad(mj.hal);
+}
+
+/* --- Dashboard Rekap --- */
+function rRekap() {
+  const m = peta(), uniq = m.size, sesi = REC.length;
+  const hari7 = [...Array(7)].map((_, i) => { const d = addDays(todayStr(), i - 6); return { d, v: REC.filter(r => r.tgl === d).reduce((a, r) => a + r.sampai - r.dari + 1, 0) }; });
+  const mx = Math.max(1, ...hari7.map(x => x.v));
+  $('mj-body').innerHTML = `
+  <div class="grid g3">
+    <div class="card stat"><b>${uniq}<small style="font-size:.9rem"> / 604</small></b><span>Halaman unik dimurojaah (${Math.round(uniq / 6.04)}%)</span><div class="bar" style="margin-top:8px"><i style="width:${uniq / 6.04}%"></i></div></div>
+    <div class="card stat"><b>${hitungStreak()}</b><span>Hari beruntun (streak)</span></div>
+    <div class="card stat"><b>${hariIni()}</b><span>Halaman hari ini · ${sesi} sesi total</span></div>
+  </div>
+  <div class="card"><div class="ttl">📈 7 HARI TERAKHIR (halaman)</div><div class="cols" style="margin-top:12px">${hari7.map(x => `<div><span class="gold2">${x.v || ''}</span><i style="height:${x.v / mx * 85}%"></i><span>${x.d.slice(5)}</span></div>`).join('')}</div></div>
+  <div class="card"><div class="ttl">🧭 PROGRES PER JUZ</div><div class="juz" style="margin-top:12px">${JUZ_HAL.map((_, i) => { const c = cover(m, juzRange(i)); return `<div style="cursor:pointer" onclick="mushafLoadDari(${JUZ_HAL[i]})"><b class="gold2">Juz ${i + 1}</b> <span class="muted">${c.pct}%</span><div class="bar" style="margin-top:4px;height:6px"><i style="width:${c.pct}%"></i></div></div>`; }).join('')}</div></div>`;
+}
+function mushafLoadDari(h) { mj.hal = h; mjShow('mushaf'); }
+
+/* --- Catat Murojaah --- */
+function rCatat() {
+  $('mj-body').innerHTML = `
+  <div class="card">
+    <div class="ttl">✍️ CATAT MUROJAAH</div>
+    <div class="grid g3" style="margin-top:12px">
+      <label class="sm muted">Tanggal<br><input id="c-tgl" type="date" class="inp" style="width:100%" value="${todayStr()}"></label>
+      <label class="sm muted">Dari halaman<br><input id="c-dari" type="number" min="1" max="604" class="inp" style="width:100%" value="${mj.hal}"></label>
+      <label class="sm muted">Sampai halaman<br><input id="c-sampai" type="number" min="1" max="604" class="inp" style="width:100%" value="${mj.hal}"></label>
+      <label class="sm muted">Kualitas hafalan<br><select id="c-mutu" class="inp" style="width:100%"><option value="lancar">Lancar</option><option value="cukup">Cukup</option><option value="ulang">Perlu diulang</option></select></label>
+    </div>
+    <label class="sm muted" style="display:block;margin-top:10px">Catatan (opsional)<br><textarea id="c-cat" class="inp" rows="2" style="width:100%" placeholder="mis. ayat 30–45 masih ragu"></textarea></label>
+    <div class="row" style="margin-top:12px"><button class="btn gold" onclick="simpanCatat()">💾 Simpan Catatan</button><span class="xs muted">Tersimpan di perangkat ini.</span></div>
+  </div>`;
+}
+function simpanCatat() {
+  const dari = +$('c-dari').value, sampai = +$('c-sampai').value, tgl = $('c-tgl').value;
+  if (!tgl || dari < 1 || sampai > 604 || sampai < dari) { toast('Periksa tanggal & rentang halaman (1–604)'); return; }
+  REC.push({ id: Date.now(), tgl, dari, sampai, mutu: $('c-mutu').value, cat: $('c-cat').value.trim() });
+  saveRec(); toast('✓ Murojaah tercatat'); mjShow('riwayat');
+}
+
+/* --- Daftar 114 Surah --- */
+function rSurah() {
+  $('mj-body').innerHTML = `<input id="s-q" class="inp" placeholder="Cari surah / nomor…" oninput="rSurahList()"><div id="s-list" class="view"></div>`;
+  rSurahList();
+}
+function rSurahList() {
+  const q = ($('s-q').value || '').toLowerCase().trim(), m = peta();
+  $('s-list').innerHTML = SURAH.map((n, i) => ({ n, i })).filter(x => !q || String(x.i + 1) === q || x.n.toLowerCase().includes(q)).map(x => {
+    const c = cover(m, surahRange(x.i));
+    return `<div class="row-item"><span class="no-b">${x.i + 1}</span>
+      <div style="flex:1;min-width:0"><b>${esc(x.n)}</b><div class="xs muted">Hal. ${SURAH_HAL[x.i]} · Juz ${juzDari(SURAH_HAL[x.i])} · ${c.c}/${c.t} hal. dimurojaah</div><div class="bar" style="margin-top:5px;height:6px"><i style="width:${c.pct}%"></i></div></div>
+      <button class="btn" onclick="mushafLoadDari(${SURAH_HAL[x.i]})">Buka</button></div>`;
+  }).join('') || '<div class="spin" style="animation:none">Surah tidak ditemukan.</div>';
+}
+
+/* --- Riwayat --- */
+const MUTU = { lancar: ['Lancar', 'var(--ok)'], cukup: ['Cukup', 'var(--gold)'], ulang: ['Perlu diulang', 'var(--warn)'] };
+function rRiwayat() {
+  const list = [...REC].sort((a, b) => b.tgl.localeCompare(a.tgl) || b.id - a.id);
+  $('mj-body').innerHTML = `
+  <div class="card row between"><div class="ttl">🕘 RIWAYAT MUTABA'AH <span class="pill">${REC.length} catatan</span></div>
+    <div class="row"><button class="btn" onclick="ekspor()">⬇ Ekspor</button><label class="btn" style="cursor:pointer">⬆ Impor<input type="file" accept=".json" hidden onchange="impor(this)"></label></div></div>
+  ${list.map(r => `<div class="row-item"><div style="flex:1"><b class="gold2">${esc(r.tgl)}</b> · Hal. ${r.dari}${r.sampai > r.dari ? '–' + r.sampai : ''} <span class="xs" style="color:${MUTU[r.mutu][1]}">● ${MUTU[r.mutu][0]}</span>${r.cat ? `<div class="xs muted">${esc(r.cat)}</div>` : ''}</div>
+    <button class="btn" onclick="mushafLoadDari(${r.dari})">Buka</button><button class="btn" onclick="hapusRec(${r.id})">🗑</button></div>`).join('') || '<div class="spin" style="animation:none">Belum ada riwayat murojaah.</div>'}`;
+}
+function hapusRec(id) { if (!confirm('Hapus catatan ini?')) return; REC = REC.filter(r => r.id !== id); saveRec(); rRiwayat(); }
+function ekspor() {
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(REC, null, 2)], { type: 'application/json' }));
+  a.download = `pepeling-murojaah-${todayStr()}.json`; a.click();
+}
+function impor(inp) {
+  const f = inp.files[0]; if (!f) return; const rd = new FileReader();
+  rd.onload = () => { try { const d = JSON.parse(rd.result); if (!Array.isArray(d)) throw 0; const ids = new Set(REC.map(r => r.id)); d.forEach(r => { if (r && r.tgl && r.dari && r.sampai && !ids.has(r.id)) REC.push(r); }); saveRec(); toast('✓ Impor berhasil'); rRiwayat(); } catch (e) { toast('File tidak valid'); } };
+  rd.readAsText(f);
+}
+
+/* ===================== AL-QUR'AN (equran.id) ===================== */
+let surahList = [], currentAyat = [], audioEl = null; const QARI = '05';
+async function loadSurahList() {
+  if (surahList.length) { renderSurahList(); return; }
+  $('quran-list').innerHTML = SPIN;
+  try { const j = await (await fetch('https://equran.id/api/v2/surat')).json(); surahList = j.data || []; renderSurahList(); }
+  catch (e) { $('quran-list').innerHTML = errHtml('loadSurahList()'); }
+}
+function renderSurahList() {
+  const q = ($('quran-search').value || '').toLowerCase().trim();
+  $('quran-list').innerHTML = surahList.filter(s => !q || String(s.nomor) === q || s.namaLatin.toLowerCase().includes(q) || s.arti.toLowerCase().includes(q)).map(s => `
+    <div class="row-item" style="cursor:pointer" onclick="openSurah(${s.nomor})"><span class="no-b">${s.nomor}</span>
+      <div style="flex:1;min-width:0"><b>${esc(s.namaLatin)}</b><div class="xs muted">${esc(s.arti)} · ${s.jumlahAyat} ayat</div></div>
+      <span class="ar gold2" style="font-size:1.3rem">${esc(s.nama)}</span></div>`).join('') || '<div class="spin" style="animation:none">Surah tidak ditemukan.</div>';
+}
+async function openSurah(n) {
+  $('quran-list-view').classList.add('hidden');
+  const rd = $('quran-reader'); rd.classList.remove('hidden'); rd.innerHTML = SPIN; window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (audioEl) { audioEl.pause(); audioEl = null; }
+  try {
+    const s = (await (await fetch(`https://equran.id/api/v2/surat/${n}`)).json()).data;
+    currentAyat = s.ayat || [];
+    const full = s.audioFull ? (s.audioFull[QARI] || Object.values(s.audioFull)[0]) : '';
+    const pv = s.suratSebelumnya, nx = s.suratSelanjutnya;
+    rd.innerHTML = `
+    <div class="row between"><button class="btn" onclick="closeSurah()">← Daftar Surah</button>
+      <div class="row">${pv ? `<button class="btn" onclick="openSurah(${pv.nomor})">‹ ${esc(pv.namaLatin)}</button>` : ''}${nx ? `<button class="btn" onclick="openSurah(${nx.nomor})">${esc(nx.namaLatin)} ›</button>` : ''}</div></div>
+    <div class="card center"><div class="mq gold2" style="font-size:2.2rem">${esc(s.nama)}</div>
+      <h3 class="cz gold2">${s.nomor}. ${esc(s.namaLatin)}</h3><div class="xs muted">${esc(s.arti)} · ${esc(s.tempatTurun)} · ${s.jumlahAyat} ayat</div>
+      ${full ? `<audio controls preload="none" src="${esc(full)}" style="width:100%;max-width:420px;margin-top:10px"></audio>` : ''}</div>
+    ${(n !== 1 && n !== 9) ? '<p class="mq center gold2" style="font-size:1.7rem;margin:0">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>' : ''}
+    ${currentAyat.map((a, i) => `<div class="ayt"><div class="row between"><span class="no-b">${a.nomorAyat}</span><button class="btn" onclick="playAyat(${i})">▶ Putar</button></div>
+      <div class="a mq">${esc(a.teksArab)}</div><div class="l">${esc(a.teksLatin)}</div><div class="i">${esc(a.teksIndonesia)}</div></div>`).join('')}`;
+  } catch (e) { rd.innerHTML = errHtml(`openSurah(${n})`); }
+}
+function closeSurah() { if (audioEl) { audioEl.pause(); audioEl = null; } $('quran-reader').classList.add('hidden'); $('quran-list-view').classList.remove('hidden'); }
+function playAyat(i) { const a = currentAyat[i]; if (!a || !a.audio) return; if (audioEl) audioEl.pause(); audioEl = new Audio(a.audio[QARI] || Object.values(a.audio)[0]); audioEl.play().catch(() => {}); }
+
+/* ===================== HADIS (api.hadith.gading.dev) ===================== */
+const HADIS_KITAB = [['bukhari', 'Shahih Bukhari'], ['muslim', 'Shahih Muslim'], ['abu-daud', 'Sunan Abu Daud'], ['tirmidzi', 'Sunan Tirmidzi'], ['nasai', "Sunan An-Nasa'i"], ['ibnu-majah', 'Sunan Ibnu Majah'], ['ahmad', 'Musnad Ahmad'], ['darimi', 'Sunan Ad-Darimi'], ['malik', "Muwatha' Malik"]];
+const hadis = { book: 'bukhari', start: 1, size: 10, total: 0 };
+function loadHadis() {
+  $('hadis-books').innerHTML = HADIS_KITAB.map(k => `<button class="btn" id="hb-${k[0]}" onclick="hadisPilih('${k[0]}')">${k[1]}</button>`).join('');
+  hadisMuat();
+}
+function hadisPilih(id) { hadis.book = id; hadis.start = 1; hadisMuat(); }
+function hadisGoto() { const n = parseInt($('hadis-goto').value, 10); if (!n || n < 1) return; hadis.start = Math.floor((n - 1) / hadis.size) * hadis.size + 1; hadisMuat(n); }
+function hadisHalaman(d) { hadis.start = Math.max(1, hadis.start + d * hadis.size); hadisMuat(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+async function hadisMuat(sorot) {
+  HADIS_KITAB.forEach(k => $('hb-' + k[0]).classList.toggle('on', k[0] === hadis.book));
+  const box = $('hadis-content'); box.innerHTML = SPIN;
+  const end = hadis.start + hadis.size - 1, nama = HADIS_KITAB.find(k => k[0] === hadis.book)[1];
+  try {
+    const d = (await (await fetch(`https://api.hadith.gading.dev/books/${hadis.book}?range=${hadis.start}-${end}`)).json()).data;
+    hadis.total = d.available || 0;
+    $('hadis-info').innerText = `${nama}: total ${hadis.total.toLocaleString('id-ID')} hadis`;
+    box.innerHTML = (d.contents || []).map(h => `<div class="ayt" ${sorot === h.number ? 'style="border-color:var(--gold)"' : ''}><span class="pill" style="align-self:flex-start">${esc(nama)} no. ${h.number}</span><div class="a mq">${esc(h.arab)}</div><div class="i">${esc(h.id)}</div></div>`).join('') || '<div class="spin" style="animation:none">Hadis tidak ditemukan.</div>';
+    $('hadis-pager').innerHTML = `<button class="btn" onclick="hadisHalaman(-1)" ${hadis.start <= 1 ? 'disabled' : ''}>‹ Sebelumnya</button><span class="sm muted">Hadis ${hadis.start} – ${Math.min(end, hadis.total || end)}</span><button class="btn" onclick="hadisHalaman(1)" ${hadis.total && end >= hadis.total ? 'disabled' : ''}>Berikutnya ›</button>`;
+  } catch (e) { box.innerHTML = errHtml('hadisMuat()'); }
+}
+
+/* ===================== DZIKIR PAGI & PETANG ===================== */
+const DZIKIR = [
+ { id: 'kursi', w: 'both', judul: 'Ayat Kursi (QS. Al-Baqarah: 255)', ulang: 1,
+   arab: 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ',
+   latin: "Allahu laa ilaaha illaa huwal hayyul qayyuum, laa ta'khudzuhuu sinatuw wa laa nauum, lahuu maa fis samaawaati wa maa fil ardh, man dzal ladzii yasyfa'u 'indahuu illaa bi-idznih, ya'lamu maa baina aidiihim wa maa khalfahum, wa laa yuhiithuuna bi syai-im min 'ilmihii illaa bimaa syaa-a, wasi'a kursiyyuhus samaawaati wal ardh, wa laa ya-uuduhuu hifzhuhumaa wa huwal 'aliyyul 'azhiim.",
+   arti: 'Allah, tidak ada tuhan (yang berhak disembah) selain Dia, Yang Mahahidup lagi terus-menerus mengurus makhluk-Nya. Tidak mengantuk dan tidak tidur. Milik-Nya apa yang ada di langit dan di bumi. Tidak ada yang dapat memberi syafaat di sisi-Nya tanpa izin-Nya. Dia mengetahui apa yang di hadapan dan di belakang mereka, dan mereka tidak mengetahui sesuatu pun dari ilmu-Nya kecuali apa yang Dia kehendaki. Kursi-Nya meliputi langit dan bumi, dan Dia tidak merasa berat memelihara keduanya. Dia Mahatinggi lagi Mahaagung.',
+   sumber: "HR. An-Nasa'i dalam Amalul Yaum wal Lailah; QS. Al-Baqarah: 255" },
+ { id: 'ikhlas', w: 'both', judul: 'Surah Al-Ikhlas', ulang: 3,
+   arab: 'قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ',
+   latin: "Qul huwallaahu ahad. Allaahush shamad. Lam yalid wa lam yuulad. Wa lam yakul lahuu kufuwan ahad.",
+   arti: 'Katakanlah (Muhammad), "Dialah Allah, Yang Maha Esa. Allah tempat meminta segala sesuatu. (Allah) tidak beranak dan tidak pula diperanakkan. Dan tidak ada sesuatu yang setara dengan Dia."',
+   sumber: 'HR. Abu Dawud no. 5082, At-Tirmidzi no. 3575' },
+ { id: 'falaq', w: 'both', judul: 'Surah Al-Falaq', ulang: 3,
+   arab: 'قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِنْ شَرِّ مَا خَلَقَ ۝ وَمِنْ شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِنْ شَرِّ حَاسِدٍ إِذَا حَسَدَ',
+   latin: "Qul a'uudzu birabbil falaq. Min syarri maa khalaq. Wa min syarri ghaasiqin idzaa waqab. Wa min syarrin naffaatsaati fil 'uqad. Wa min syarri haasidin idzaa hasad.",
+   arti: 'Katakanlah, "Aku berlindung kepada Tuhan yang menguasai subuh (fajar), dari kejahatan makhluk yang Dia ciptakan, dan dari kejahatan malam apabila telah gelap gulita, dan dari kejahatan perempuan-perempuan penyihir yang meniup pada buhul-buhul (talinya), dan dari kejahatan orang yang dengki apabila dia dengki."',
+   sumber: 'HR. Abu Dawud no. 5082, At-Tirmidzi no. 3575' },
+ { id: 'nas', w: 'both', judul: 'Surah An-Nas', ulang: 3,
+   arab: 'قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ',
+   latin: "Qul a'uudzu birabbin naas. Malikin naas. Ilaahin naas. Min syarril waswaasil khannaas. Alladzii yuwaswisu fii shuduurin naas. Minal jinnati wan naas.",
+   arti: 'Katakanlah, "Aku berlindung kepada Tuhannya manusia, Raja manusia, sembahan manusia, dari kejahatan (bisikan) setan yang bersembunyi, yang membisikkan (kejahatan) ke dalam dada manusia, dari (golongan) jin dan manusia."',
+   sumber: 'HR. Abu Dawud no. 5082, At-Tirmidzi no. 3575' },
+ { id: 'ashbahna', w: 'both', judul: 'Doa Memasuki Pagi / Petang', ulang: 1,
+   arab: { pagi: 'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَٰذَا الْيَوْمِ وَخَيْرَ مَا بَعْدَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَٰذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ',
+           petang: 'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَٰذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَٰذِهِ اللَّيْلَةِ وَشَرِّ مَا بَعْدَهَا، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ' },
+   latin: { pagi: "Ashbahnaa wa ashbahal mulku lillaah, walhamdulillaah, laa ilaaha illallaahu wahdahu laa syariika lah, lahul mulku wa lahul hamdu wa huwa 'alaa kulli syai-in qadiir. Rabbi as-aluka khaira maa fii haadzal yaum wa khaira maa ba'dah, wa a'uudzu bika min syarri maa fii haadzal yaum wa syarri maa ba'dah. Rabbi a'uudzu bikal kasali wa suu-il kibar, rabbi a'uudzu bika min 'adzaabin fin naari wa 'adzaabin fil qabr.",
+            petang: "Amsainaa wa amsal mulku lillaah, walhamdulillaah, laa ilaaha illallaahu wahdahu laa syariika lah, lahul mulku wa lahul hamdu wa huwa 'alaa kulli syai-in qadiir. Rabbi as-aluka khaira maa fii haadzihil lailah wa khaira maa ba'dahaa, wa a'uudzu bika min syarri maa fii haadzihil lailah wa syarri maa ba'dahaa. Rabbi a'uudzu bikal kasali wa suu-il kibar, rabbi a'uudzu bika min 'adzaabin fin naari wa 'adzaabin fil qabr." },
+   arti: { pagi: 'Kami telah memasuki waktu pagi dan kerajaan hanya milik Allah, segala puji bagi Allah. Tidak ada tuhan yang berhak disembah selain Allah semata, tiada sekutu bagi-Nya. Milik-Nya kerajaan dan pujian, dan Dia Mahakuasa atas segala sesuatu. Wahai Rabbku, aku memohon kepada-Mu kebaikan hari ini dan kebaikan sesudahnya, dan aku berlindung kepada-Mu dari kejahatan hari ini dan kejahatan sesudahnya. Wahai Rabbku, aku berlindung kepada-Mu dari kemalasan dan buruknya usia tua. Wahai Rabbku, aku berlindung kepada-Mu dari azab di neraka dan azab di kubur.',
+           petang: 'Kami telah memasuki waktu petang dan kerajaan hanya milik Allah, segala puji bagi Allah. Tidak ada tuhan yang berhak disembah selain Allah semata, tiada sekutu bagi-Nya. Milik-Nya kerajaan dan pujian, dan Dia Mahakuasa atas segala sesuatu. Wahai Rabbku, aku memohon kepada-Mu kebaikan malam ini dan kebaikan sesudahnya, dan aku berlindung kepada-Mu dari kejahatan malam ini dan kejahatan sesudahnya. Wahai Rabbku, aku berlindung kepada-Mu dari kemalasan dan buruknya usia tua. Wahai Rabbku, aku berlindung kepada-Mu dari azab di neraka dan azab di kubur.' },
+   sumber: 'HR. Muslim no. 2723' },
+ { id: 'bika', w: 'both', judul: 'Allahumma Bika Ashbahna / Amsaina', ulang: 1,
+   arab: { pagi: 'اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ', petang: 'اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ' },
+   latin: { pagi: "Allaahumma bika ashbahnaa, wa bika amsainaa, wa bika nahyaa, wa bika namuutu, wa ilaikan nusyuur.", petang: "Allaahumma bika amsainaa, wa bika ashbahnaa, wa bika nahyaa, wa bika namuutu, wa ilaikal mashiir." },
+   arti: { pagi: 'Ya Allah, dengan rahmat dan pertolongan-Mu kami memasuki waktu pagi, dan dengan rahmat dan pertolongan-Mu kami memasuki waktu petang. Dengan kehendak-Mu kami hidup dan dengan kehendak-Mu kami mati, dan hanya kepada-Mu kebangkitan (kami).',
+           petang: 'Ya Allah, dengan rahmat dan pertolongan-Mu kami memasuki waktu petang, dan dengan rahmat dan pertolongan-Mu kami memasuki waktu pagi. Dengan kehendak-Mu kami hidup dan dengan kehendak-Mu kami mati, dan hanya kepada-Mu tempat kembali (kami).' },
+   sumber: 'HR. At-Tirmidzi no. 3391, Abu Dawud no. 5068' },
+ { id: 'sayyidul', w: 'both', judul: 'Sayyidul Istighfar', ulang: 1,
+   arab: 'اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَٰهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَىٰ عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي، فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ',
+   latin: "Allaahumma anta rabbii laa ilaaha illaa anta, khalaqtanii wa anaa 'abduka, wa anaa 'alaa 'ahdika wa wa'dika mastatha'tu, a'uudzu bika min syarri maa shana'tu, abuu-u laka bini'matika 'alayya, wa abuu-u bidzanbii faghfir lii, fa-innahuu laa yaghfirudz dzunuuba illaa anta.",
+   arti: 'Ya Allah, Engkau adalah Rabbku, tidak ada tuhan yang berhak disembah selain Engkau. Engkau yang menciptakanku dan aku adalah hamba-Mu. Aku berada di atas perjanjian dan janji-Mu semampuku. Aku berlindung kepada-Mu dari keburukan yang aku perbuat. Aku mengakui nikmat-Mu kepadaku dan aku mengakui dosaku, maka ampunilah aku. Sesungguhnya tidak ada yang dapat mengampuni dosa selain Engkau.',
+   sumber: 'HR. Al-Bukhari no. 6306' },
+ { id: 'afini', w: 'both', judul: 'Doa Keselamatan Badan, Pendengaran & Penglihatan', ulang: 3,
+   arab: 'اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَٰهَ إِلَّا أَنْتَ',
+   latin: "Allaahumma 'aafinii fii badanii, allaahumma 'aafinii fii sam'ii, allaahumma 'aafinii fii bashari, laa ilaaha illaa anta.",
+   arti: 'Ya Allah, selamatkanlah badanku (dari penyakit dan maksiat), Ya Allah, selamatkanlah pendengaranku, Ya Allah, selamatkanlah penglihatanku. Tidak ada tuhan yang berhak disembah selain Engkau.',
+   sumber: 'HR. Abu Dawud no. 5090, Ahmad' },
+ { id: 'bismillah', w: 'both', judul: 'Perlindungan dari Segala Mara Bahaya', ulang: 3,
+   arab: 'بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ',
+   latin: "Bismillaahilladzii laa yadhurru ma'asmihii syai-un fil ardhi wa laa fis samaa-i wa huwas samii'ul 'aliim.",
+   arti: 'Dengan nama Allah yang bersama nama-Nya tidak ada sesuatu pun di bumi maupun di langit yang dapat membahayakan, dan Dia Maha Mendengar lagi Maha Mengetahui.',
+   sumber: 'HR. Abu Dawud no. 5088, At-Tirmidzi no. 3388' },
+ { id: 'radhitu', w: 'both', judul: 'Ridha Allah sebagai Rabb', ulang: 3,
+   arab: 'رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ صلى الله عليه وسلم نَبِيًّا',
+   latin: "Radhiitu billaahi rabbaa, wa bil islaami diinaa, wa bi muhammadin shallallaahu 'alaihi wa sallama nabiyyaa.",
+   arti: 'Aku ridha Allah sebagai Rabb (Tuhan)ku, Islam sebagai agamaku, dan Muhammad ﷺ sebagai nabiku.',
+   sumber: 'HR. Abu Dawud no. 5072, At-Tirmidzi no. 3389' },
+ { id: 'hasbiyallah', w: 'both', judul: 'Hasbiyallah', ulang: 7,
+   arab: 'حَسْبِيَ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ، عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ',
+   latin: "Hasbiyallaahu laa ilaaha illaa huwa, 'alaihi tawakkaltu wa huwa rabbul 'arsyil 'azhiim.",
+   arti: 'Cukuplah Allah bagiku, tidak ada tuhan yang berhak disembah selain Dia. Hanya kepada-Nya aku bertawakal, dan Dia adalah Rabb pemilik Arsy yang agung.',
+   sumber: "HR. Abu Dawud no. 5081 (dari Abu Darda', mauquf)" },
+ { id: 'subhanallah', w: 'both', judul: 'Tasbih Pagi & Petang', ulang: 100,
+   arab: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ', latin: "Subhaanallaahi wa bihamdih.",
+   arti: 'Mahasuci Allah, aku memuji-Nya. (Barangsiapa membacanya 100 kali di waktu pagi dan petang, tidak ada seorang pun yang datang pada hari kiamat dengan amalan lebih utama kecuali yang membaca semisal itu atau lebih banyak.)',
+   sumber: 'HR. Muslim no. 2692' },
+ { id: 'lailaha', w: 'both', judul: 'Tahlil', ulang: 10,
+   arab: 'لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ',
+   latin: "Laa ilaaha illallaahu wahdahu laa syariika lah, lahul mulku wa lahul hamdu wa huwa 'alaa kulli syai-in qadiir.",
+   arti: 'Tidak ada tuhan yang berhak disembah selain Allah semata, tiada sekutu bagi-Nya. Milik-Nya kerajaan dan pujian, dan Dia Mahakuasa atas segala sesuatu. (Minimal 10 kali; boleh diperbanyak hingga 100 kali.)',
+   sumber: 'HR. Al-Bukhari no. 3293, Muslim no. 2691; Abu Dawud no. 5077' },
+ { id: 'ilmu', w: 'pagi', judul: 'Doa Memohon Ilmu yang Bermanfaat (Pagi)', ulang: 1,
+   arab: 'اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا طَيِّبًا، وَعَمَلًا مُتَقَبَّلًا',
+   latin: "Allaahumma innii as-aluka 'ilman naafi'aa, wa rizqan thayyibaa, wa 'amalan mutaqabbalaa.",
+   arti: 'Ya Allah, sesungguhnya aku memohon kepada-Mu ilmu yang bermanfaat, rezeki yang baik, dan amal yang diterima.',
+   sumber: 'HR. Ibnu Majah no. 925' },
+ { id: 'audzu', w: 'petang', judul: 'Berlindung dengan Kalimat Allah yang Sempurna (Petang)', ulang: 3,
+   arab: 'أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ',
+   latin: "A'uudzu bikalimaatillaahit taammaati min syarri maa khalaq.",
+   arti: 'Aku berlindung dengan kalimat-kalimat Allah yang sempurna dari kejahatan makhluk yang Dia ciptakan.',
+   sumber: 'HR. Muslim no. 2709' }
+];
+const dz = { waktu: null, counts: {} };
+const pick = (v, w) => (v && typeof v === 'object') ? v[w] : v;
+function dzInit() {
+  const s = LS.get('pepeling-dzikir', null);
+  dz.counts = (s && s.tgl === todayStr()) ? s.counts : {};
+  if (!dz.waktu) dz.waktu = wibNow().getHours() < 12 ? 'pagi' : 'petang';
+  dzRender();
+}
+const dzSimpan = () => LS.set('pepeling-dzikir', { tgl: todayStr(), counts: dz.counts });
+function dzSetWaktu(w) { dz.waktu = w; dzRender(); }
+function dzReset() { Object.keys(dz.counts).filter(k => k.startsWith(dz.waktu + '-')).forEach(k => delete dz.counts[k]); dzSimpan(); dzRender(); }
+function dzRender() {
+  const w = dz.waktu;
+  ['pagi', 'petang'].forEach(x => $('dz-tab-' + x).classList.toggle('on', x === w));
+  $('dz-waktu-info').innerText = w === 'pagi' ? 'Waktu dzikir pagi: setelah Subuh hingga matahari terbit / waktu Dhuha.' : 'Waktu dzikir petang: setelah salat Ashar hingga matahari terbenam (Maghrib).';
+  $('dz-list').innerHTML = DZIKIR.filter(d => d.w === 'both' || d.w === w).map((d, i) => {
+    const key = `${w}-${d.id}`, c = dz.counts[key] || 0, ok = c >= d.ulang;
+    return `<div class="ayt"><div class="row between"><h4 class="gold2" style="font-size:.92rem">${i + 1}. ${esc(d.judul)}</h4><span class="pill">Dibaca ${d.ulang}×</span></div>
+      <div class="a mq">${esc(pick(d.arab, w))}</div><div class="l">${esc(pick(d.latin, w))}</div><div class="i">${esc(pick(d.arti, w))}</div>
+      <div class="row between"><span class="xs muted">📚 ${esc(d.sumber)}</span><button id="dz-btn-${key}" class="btn ${ok ? 'on' : ''}" onclick="dzTap('${key}',${d.ulang})">${ok ? '✓ Selesai' : `Hitung ${c}/${d.ulang}`}</button></div></div>`;
+  }).join('');
+}
+function dzTap(key, target) {
+  const c = Math.min(target, (dz.counts[key] || 0) + 1); dz.counts[key] = c; dzSimpan();
+  const b = $('dz-btn-' + key); if (!b) return;
+  if (c >= target) { b.innerText = '✓ Selesai'; b.classList.add('on'); } else b.innerText = `Hitung ${c}/${target}`;
+}
+
+/* ===================== INISIALISASI ===================== */
+window.onload = function () {
+  FIVE.forEach(p => { $('iq-' + p).innerText = `Iqomah ${CONFIG.IQOMAH_MENIT[p]} mnt`; });
+  $('ihtiyati-info').innerText = `Subuh +${CONFIG.IHTIYATI_MENIT.subuh} mnt`;
+  fetchPrayerTimes(); setInterval(tick, 500); tick();
+  const h = (location.hash || '').replace('#', '');
+  go(VIEWS.includes(h) ? h : 'home');
+};
+</script>
+</body>
+</html>
